@@ -6,6 +6,10 @@ export default async function rentalsValidate(req, res, next) {
   const validateResult = rentalSchema.validate(newRental, {
     abortEarly: false,
   });
+  if (validateResult.error) {
+    return res.status(400).send(validateResult.error.details);
+  }
+
   const resultCustomer = await db.query(
     'SELECT * FROM customers WHERE id = $1',
     [newRental?.customerId]
@@ -16,10 +20,6 @@ export default async function rentalsValidate(req, res, next) {
 
   if (resultCustomer.rowCount === 0 || resultGame.rowCount === 0) {
     return res.sendStatus(400);
-  }
-
-  if (validateResult.error) {
-    return res.status(400).send(validateResult.error.details);
   }
 
   next();
