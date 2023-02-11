@@ -7,7 +7,7 @@ export default async function postRentals(req, res) {
   try {
     const queryResult = await db.query({
       text: `INSERT INTO rentals 
-      (customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee) 
+      ("customerId", "gameId", "rentDate", "daysRented", "returnDate", "originalPrice", "delayFee") 
       VALUES ($1, $2, $3, $4, $5, (SELECT "pricePerDay" * $4 FROM games WHERE id = $2), $6)`,
       values: [customerId, gameId, dayjs().format("YYYY-MM-DD") ,daysRented, null, null],
     });
@@ -18,6 +18,6 @@ export default async function postRentals(req, res) {
 
     res.sendStatus(201);
   } catch (error) {
-    res.status(500).send('Erro interno ao criar o jogo: ' + error.message);
+    res.status(500).send('Erro interno ao criar locação: ' + error.message);
   }
 }
