@@ -17,7 +17,7 @@ export default async function getCustomersById(req, res) {
 
     if (customers.rows.length === 0) return res.sendStatus(404);
 
-    res.status(200).send(customers.rows);
+    res.status(200).send(customers.rows[0]);
   } catch (error) {
     res
       .status(500)
