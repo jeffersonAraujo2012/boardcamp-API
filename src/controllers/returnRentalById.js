@@ -16,16 +16,19 @@ export default async function returnRentalById(req, res) {
       return res.status(400).send('Aluguel já finalizado.');
     }
 
-    const pricePerDay = await db.query(
+    const rental = resultQuery.rows[0];
+
+    const pricePerDayQuery = await db.query(
       'SELECT "pricePerDay" FROM games WHERE id = $1',
-      [resultQuery.gameId]
+      [rental.gameId]
     );
+    const pricePerDay = pricePerDayQuery.rows[0].pricePerDay;
 
-    const rentDate = dayjs(resultQuery.rentDate);
-    const returnDate = dayjs();
-    const originalReturnDate = rentDate.add(resultQuery.daysRented, 'day');
+    const rentDate = dayjs(rental.rentDate);
+    const returnDate = dayjs('2023-02-15');
+    const originalReturnDate = rentDate.add(rental.daysRented, 'day');
+
     const diff = returnDate.diff(originalReturnDate, 'day');
-
     const delayFee = diff > 0 ? pricePerDay * diff : 0;
 
     await db.query(
