@@ -25,7 +25,7 @@ export default async function returnRentalById(req, res) {
     const pricePerDay = pricePerDayQuery.rows[0].pricePerDay;
 
     const rentDate = dayjs(rental.rentDate);
-    const returnDate = dayjs('2023-02-15');
+    const returnDate = dayjs();
     const originalReturnDate = rentDate.add(rental.daysRented, 'day');
 
     const diff = returnDate.diff(originalReturnDate, 'day');
